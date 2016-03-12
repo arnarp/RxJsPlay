@@ -8,7 +8,7 @@ module.exports = {
   entry: [
     'webpack-dev-server/client?http://localhost:8080',
     'webpack/hot/dev-server',
-    './src/index'
+    './src/index.ts'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -18,6 +18,9 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: './src/index.html'
+    }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development')
     })
   ],
   module: {
@@ -27,6 +30,11 @@ module.exports = {
     }, {
         test: /\.js$/,
         loaders: ['babel'],
+        include: path.join(__dirname, 'src')
+      }, {
+        test: /\.ts$/,
+        loader: 'ts-loader',
+        exclude: [/\.(spec|e2e)\.ts$/],
         include: path.join(__dirname, 'src')
       }, {
         test: /\.html$/,
